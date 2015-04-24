@@ -11,16 +11,17 @@ module Paperclip
       end
     end
 
-
     def crop_command
       target = @attachment.instance
 
-      if target.cropping?(@attachment.name)
+      if target.cropping?(@attachment.name) && options[:skip_cropping].blank?
         w = target.send :"#{@attachment.name}_crop_w"
         h = target.send :"#{@attachment.name}_crop_h"
         x = target.send :"#{@attachment.name}_crop_x"
         y = target.send :"#{@attachment.name}_crop_y"
         ["-crop", "#{w}x#{h}+#{x}+#{y}"]
+      elsif options[:fixed_cropping].present?
+        ["-crop", options[:fixed_cropping]]
       end
     end
 

@@ -38,9 +38,6 @@ module Papercrop
           definitions = Paperclip::Tasks::Attachments.instance.definitions_for(self)
         end
 
-        definitions[attachment_name][:processors] ||= []
-        definitions[attachment_name][:processors] << :cropper
-
         after_update :"reprocess_to_crop_#{attachment_name}_attachment"
       end
     end
