@@ -12,16 +12,19 @@ module Papercrop
     # @param opts [Hash]
     def crop_preview(attachment, opts = {})
       attachment = attachment.to_sym
+      style      = opts[:style] || :original
+      klass      = opts[:class]
       width      = opts[:width] || 100
       height     = (width / self.object.send(:"#{attachment}_aspect")).round 
 
       if self.object.send(attachment).class == Paperclip::Attachment
         wrapper_options = {
-          :id    => "#{attachment}_crop_preview_wrapper",
-          :style => "width:#{width}px; height:#{height}px; overflow:hidden"
+          id:    "#{attachment}_crop_preview_wrapper",
+          style: "width:#{width}px; height:#{height}px; overflow:hidden",
+          class: klass
         }
 
-        preview_image = @template.image_tag(self.object.send(attachment).url, :id => "#{attachment}_crop_preview")
+        preview_image = @template.image_tag(self.object.send(attachment).url(style), :id => "#{attachment}_crop_preview")
 
         @template.content_tag(:div, preview_image, wrapper_options)
       end
